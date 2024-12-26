@@ -1,0 +1,1 @@
+Checks:          'clang-diagnostic-*,clang-analyzer-*,modernize-*,bugprone-*,cppcoreguidelines-*,hicpp-*,performance-*,portability-*,readability-*'
