@@ -1,12 +1,11 @@
+#include "engine.hh"
+#include "renderer/renderer.hh"
+#include "renderer/vulkan.hh"
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <string_view>
 #include <vector>
-#include <vulkan/vulkan.hpp>
-#include <vulkan/vulkan_structs.hpp>
-
-#include "engine.hh"
 
 using std::chrono::high_resolution_clock;
 
@@ -15,7 +14,10 @@ main (int argc, char *argv[]) -> int
 {
   const std::vector<std::string_view> args (argv, argv + argc);
 
-  Engine engine ("Cappy engine");
+  cappy::renderer::vulkan::VulkanRenderer renderer{
+    "Cappy engine test", cappy::renderer::Version{ 0, 0, 1 }
+  };
+  cappy::Engine engine ("Cappy engine", renderer);
 
   long frames = 0;
   double unprocessed_seconds = 0;
@@ -62,6 +64,11 @@ main (int argc, char *argv[]) -> int
   return EXIT_SUCCESS;
 }
 
+namespace cappy
+{
+
+using renderer::Renderer;
+
 auto
 Engine::create_window (int width, int height,
                        const std::string &name) -> GLFWwindow *
@@ -74,11 +81,10 @@ Engine::create_window (int width, int height,
   return glfwCreateWindow (width, height, name.c_str (), nullptr, nullptr);
 }
 
-Engine::Engine (const std::string &name)
-    : vkInstance (create_vulkan_instance (name)),
+Engine::Engine (const std::string &name, Renderer &renderer)
+    : renderer (renderer),
       window (create_window (WINDOW_WIDTH, WINDOW_HEIGHT, name))
 {
-  create_vulkan_instance (name);
 }
 
 Engine::~Engine ()
@@ -115,4 +121,6 @@ auto
 Engine::stop () -> void
 {
   running = false;
+}
+
 }

@@ -6,6 +6,7 @@ project_description = 'An example shared library'
 
 project_source_files = [
   'src/engine.cc',
+  'src/renderer/vulkan.cc',
 ]
 
 project_test_files = [
