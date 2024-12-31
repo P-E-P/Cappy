@@ -43,7 +43,7 @@
         devShell = pkgs.mkShell {
           inputsFrom = builtins.attrValues self.packages.${system};
 
-          buildInputs = with pkgs; [ clang-tools ];
+          buildInputs = with pkgs; [ clang-tools ] ++ self.packages.${system}.engine.buildInputs;
         };
 
         defaultPackage = self.packages.${system}.engine;
